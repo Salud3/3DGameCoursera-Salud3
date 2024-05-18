@@ -464,7 +464,7 @@ PlayerSettings:
   WebGL::emscriptenArgs: 
   WebGL::template: APPLICATION:Default
   additionalIl2CppArgs::additionalIl2CppArgs: 
-  cloudProjectId: 2f84f4a3-e25c-4984-9543-8cbeb3e708d9
-  projectName: 3DGameCoursera
-  organizationId: pfiguero
+  cloudProjectId: 3fa7e628-0dcd-443b-aaee-61923c8b661c
+  projectName: 3DGameCoursera-Salud3
+  organizationId: salud3
   cloudEnabled: 0
