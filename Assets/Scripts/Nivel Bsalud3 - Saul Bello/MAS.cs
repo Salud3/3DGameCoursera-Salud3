@@ -1,5 +1,6 @@
-
 using TMPro;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MAS : MonoBehaviour
@@ -9,6 +10,11 @@ public class MAS : MonoBehaviour
     public enum ElevatorType { Arriba, Derecha, Enfrente, izquierda };
     public ElevatorType movimiento;
     Vector3 initialPosition;
+
+    public bool childs;
+
+    public delegate void Child();
+    public static event Child OnChild;
 
     void Start()
     {
@@ -46,4 +52,35 @@ public class MAS : MonoBehaviour
         }
 
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.gameObject.transform.SetParent(transform);
+        }
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.gameObject.transform.SetParent(null);
+        }
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name.Equals("Player"))
+        {
+            other.transform.parent = this.transform;
+        }
+    }
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.name.Equals("Player"))
+        {
+
+            other.transform.parent = null;
+        }
+    }
+
 }

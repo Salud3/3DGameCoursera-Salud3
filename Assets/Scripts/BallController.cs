@@ -10,6 +10,7 @@ public class BallController : MonoBehaviour {
 	public static event BolaDestruida OnBolaDestruida;
 
 	public GameObject generadorRampa;
+	public int index;
 
 	public float tDespuesOlla = 5f;
 
@@ -17,6 +18,7 @@ public class BallController : MonoBehaviour {
 	private SphereCollider col;
 	private Material m;
 	private bool floatingToGeneradorRampa = false;
+	private bool floatingToJumper = false;
 	private float tIni;
 	Vector3 pIni;
 
@@ -25,7 +27,7 @@ public class BallController : MonoBehaviour {
 		rgb = GetComponent<Rigidbody> ();
 		col = GetComponent<SphereCollider> ();
 		m = GetComponent<Renderer>().material;
-		generadorRampa = GameObject.Find ("GeneradorRampa");
+		generadorRampa = GameObject.Find ("GeneradorRampa" + index.ToString());
 	}
 
 	// Update is called once per frame
@@ -41,8 +43,32 @@ public class BallController : MonoBehaviour {
 				ResetRigidbody ();
 			}
 		}
-	}
 
+		if (floatingToJumper)
+		{
+            float t = (Time.time - tIni) / tDespuesOlla;
+            if (t < 1f)
+            {
+                Vector3 p = Vector3.Lerp(pIni, generadorRampa.transform.position, t);
+                transform.position = p;
+            }
+            else
+            {
+                floatingToGeneradorRampa = false;
+                MakeGhost(false);
+                ResetRigidbody();
+            }
+        }
+
+	}
+	public void function()
+	{
+		Debug.Log("a");
+        MakeGhost(true);
+        floatingToGeneradorRampa = true;
+        tIni = Time.time;
+        pIni = transform.position;
+    }
 	void OnTriggerEnter(Collider other) {
 		if (other.gameObject.name.Contains ("FondoOlla") && !floatingToGeneradorRampa) {
 			//ResetRigidbody ();
@@ -71,17 +97,21 @@ public class BallController : MonoBehaviour {
 
 	void MakeGhost( bool state ) {
 		if (state) {
+
 			rgb.isKinematic = true;
 			col.enabled = false;
 			Color c = m.color;
 			c.a = 30 / 256f;
 			m.color = c;
+
 		} else {
+
 			rgb.isKinematic = false;
 			col.enabled = true;
 			Color c = m.color;
 			c.a = 1f;
 			m.color = c;
+
 		}
 	}
 }
